@@ -9,7 +9,6 @@ const navItems = [
   { label: 'Tabela',      to: '/tabela',     icon: '📊' },
   { label: 'Jogadores',   to: '/jogadores',  icon: '👥' },
   { label: 'Notícias',    to: '/noticias',   icon: '📰' },
-  { label: 'Analytics',   to: '/analytics',  icon: '📈' },
 ]
 
 export default function Header() {

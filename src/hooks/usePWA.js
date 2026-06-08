@@ -17,7 +17,7 @@ export function usePWA() {
       navigator.serviceWorker
         .register('/service-worker.js')
         .then((registration) => {
-          console.log('[PWA] Service Worker registered:', registration)
+          if (import.meta.env.DEV) console.log('[PWA] Service Worker registered:', registration)
 
           // Verificar atualizações a cada hora
           setInterval(() => {

@@ -1,4 +1,7 @@
-export const LEAGUES = [
+// 🟢 Todas as ligas suportadas (definições).
+// Por enquanto só o Brasileirão está ATIVO. Para reativar outra liga,
+// basta adicionar o id dela em ACTIVE_LEAGUE_IDS abaixo.
+const ALL_LEAGUES = [
   {
     id:      'bra.1',
     name:    'Brasileirão',
@@ -78,4 +81,9 @@ export const LEAGUES = [
   },
 ]
 
-export const getLeague = (id) => LEAGUES.find(l => l.id === id) ?? LEAGUES[0]
+// 👉 Ligas que aparecem no site. Para liberar outra, adicione o id aqui.
+const ACTIVE_LEAGUE_IDS = ['bra.1']
+
+export const LEAGUES = ALL_LEAGUES.filter(l => ACTIVE_LEAGUE_IDS.includes(l.id))
+
+export const getLeague = (id) => ALL_LEAGUES.find(l => l.id === id) ?? LEAGUES[0]

@@ -14,7 +14,6 @@ import CompeticoesPage  from './pages/CompeticoesPage'
 import JogadoresPage    from './pages/JogadoresPage'
 import FavoritosPage    from './pages/FavoritosPage'
 import NoticiasPage     from './pages/NoticiasPage'
-import AnalyticsPage    from './pages/AnalyticsPage'
 import CompetitionPage  from './pages/CompetitionPage'
 
 import { getLeague } from './leagues'
@@ -52,7 +51,6 @@ export default function App() {
             <Route path="/jogadores"             element={<JogadoresPage {...pageProps} />} />
             <Route path="/favoritos"             element={<FavoritosPage />} />
             <Route path="/noticias"              element={<NoticiasPage />} />
-            <Route path="/analytics"             element={<AnalyticsPage />} />
             <Route path="/competition/:leagueId" element={<CompetitionPage />} />
             <Route path="*"                      element={<Navigate to="/" replace />} />
           </Routes>

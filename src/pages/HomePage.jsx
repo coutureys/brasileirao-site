@@ -16,11 +16,11 @@ export default function HomePage({ league, leagueInfo }) {
     schema: websiteSchema,
   })
 
-  const topLeagues = [
-    { id: 'bra.1', name: 'Brasileirão Série A', emoji: '🇧🇷', color: '#10b981', desc: 'Principal liga brasileira' },
-    { id: 'lib', name: 'Libertadores', emoji: '🏆', color: '#f59e0b', desc: 'Copa sul-americana' },
-    { id: 'bra.2', name: 'Série B', emoji: '🇧🇷', color: '#3b82f6', desc: 'Segunda divisão' },
-    { id: 'bra.copa', name: 'Copa do Brasil', emoji: '🏆', color: '#8b5cf6', desc: 'Copa nacional' },
+  const quickLinks = [
+    { to: '/jogos', name: 'Jogos', emoji: '⚽', color: '#10b981', desc: 'Resultados e jogos ao vivo' },
+    { to: '/tabela', name: 'Tabela', emoji: '📊', color: '#3b82f6', desc: 'Classificação da Série A' },
+    { to: '/jogadores', name: 'Artilheiros', emoji: '🥇', color: '#f59e0b', desc: 'Gols e estatísticas' },
+    { to: '/noticias', name: 'Notícias', emoji: '📰', color: '#8b5cf6', desc: 'Últimas do Brasileirão' },
   ]
 
   return (
@@ -67,9 +67,9 @@ export default function HomePage({ league, leagueInfo }) {
           {/* Stats com animações */}
           <div className="grid grid-cols-3 gap-4 mt-14 max-w-md mx-auto">
             {[
-              { value: '30+', label: 'Competições', delay: 0 },
-              { value: '1000+', label: 'Jogadores', delay: 1 },
-              { value: '24/7', label: 'Ao Vivo', delay: 2 },
+              { value: 'Série A', label: 'Brasileirão', delay: 0 },
+              { value: 'Ao Vivo', label: 'Tempo real', delay: 1 },
+              { value: 'Grátis', label: 'Sem cadastro', delay: 2 },
             ].map((stat, i) => (
               <div
                 key={i}
@@ -89,22 +89,16 @@ export default function HomePage({ league, leagueInfo }) {
         {/* === DESTAQUES === */}
         <section>
           <div className="flex items-center gap-3 mb-8">
-            <h2 className="text-3xl font-black text-white">🔥 Principais Competições</h2>
-            <button
-              onClick={() => navigate('/competicoes')}
-              className="ml-auto px-3 py-1.5 text-sm font-bold text-white/60 hover:text-white
-                        bg-white/5 hover:bg-white/10 border border-white/10 rounded-lg transition">
-              Ver todas →
-            </button>
+            <h2 className="text-3xl font-black text-white">🔥 Acesso Rápido</h2>
           </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-            {topLeagues.map((lg, idx) => (
+            {quickLinks.map((lg, idx) => (
               <AnimatedCard
-                key={lg.id}
+                key={lg.to}
                 animation="slide-up"
                 delay={idx}
-                onClick={() => navigate(`/competition/${lg.id}`)}
+                onClick={() => navigate(lg.to)}
                 className="group relative overflow-hidden rounded-2xl p-6"
                 style={{
                   background: `linear-gradient(135deg, ${lg.color}20, ${lg.color}10)`,
@@ -170,10 +164,10 @@ export default function HomePage({ league, leagueInfo }) {
             </AnimatedButton>
             <AnimatedButton
               variant="secondary"
-              onClick={() => navigate('/analytics')}
+              onClick={() => navigate('/tabela')}
               className="animate-slide-up"
               style={{ animationDelay: '100ms' }}>
-              📈 Ver Analytics
+              📊 Ver Tabela
             </AnimatedButton>
           </div>
         </section>

@@ -4,7 +4,6 @@ import { getLeague } from '../leagues'
 import Standings from '../components/Standings'
 import LiveScores from '../components/LiveScores'
 import Players from '../components/Players'
-import TeamEvolution from '../components/TeamEvolution'
 
 /**
  * 🏆 COMPETITION HUB — Página dedicada por competição
@@ -31,10 +30,8 @@ export default function CompetitionPage() {
 
   const tabs = [
     { id: 'standings', label: 'Classificação', icon: '📊' },
-    { id: 'matches', label: 'Próximos', icon: '⏱️' },
-    { id: 'results', label: 'Resultados', icon: '✓' },
-    { id: 'players', label: 'Artilheiros', icon: '⚽' },
-    { id: 'analytics', label: 'Analytics', icon: '📈' },
+    { id: 'matches', label: 'Jogos', icon: '⚽' },
+    { id: 'players', label: 'Artilheiros', icon: '🥇' },
   ]
 
   return (
@@ -60,7 +57,7 @@ export default function CompetitionPage() {
                 {leagueInfo.name}
               </h1>
               <p className="text-white/60 text-sm mt-2">
-                Temporada 2025-26 • 38 rodadas
+                Temporada 2026
               </p>
             </div>
 
@@ -72,18 +69,6 @@ export default function CompetitionPage() {
             >
               ← Voltar
             </button>
-          </div>
-
-          {/* Barra de progresso da temporada */}
-          <div className="space-y-2">
-            <div className="flex justify-between text-xs text-white/50">
-              <span>Rodada 30 de 38</span>
-              <span>79% completo</span>
-            </div>
-            <div className="h-1.5 bg-white/10 rounded-full overflow-hidden">
-              <div className="h-full bg-gradient-to-r from-brand-green to-emerald-400 rounded-full transition-all"
-                   style={{ width: '79%' }} />
-            </div>
           </div>
         </div>
       </div>
@@ -125,30 +110,10 @@ export default function CompetitionPage() {
           </div>
         )}
 
-        {activeTab === 'results' && (
-          <div className="py-12 sm:py-16">
-            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-              <h2 className="section-title mb-8">Últimos Resultados</h2>
-              <div className="card p-10 text-center text-white/40">
-                <p className="text-2xl mb-2">📋</p>
-                <p>Resultados em desenvolvimento</p>
-              </div>
-            </div>
-          </div>
-        )}
-
         {activeTab === 'players' && (
           <div className="py-12 sm:py-16">
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
               <Players league={leagueId} leagueInfo={leagueInfo} />
-            </div>
-          </div>
-        )}
-
-        {activeTab === 'analytics' && (
-          <div className="py-12 sm:py-16">
-            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-              <TeamEvolution teamName={leagueInfo.name} />
             </div>
           </div>
         )}

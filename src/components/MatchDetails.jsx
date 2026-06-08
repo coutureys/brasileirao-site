@@ -1,7 +1,5 @@
 import { useState } from 'react'
-import PassHeatmap from './PassHeatmap'
 import MatchTimeline from './MatchTimeline'
-import MatchStats from './MatchStats'
 import Comments from './Comments'
 
 /**
@@ -9,26 +7,14 @@ import Comments from './Comments'
  * Modal/página com abas: Resumo, Timeline, Heatmap, Comentários
  */
 export default function MatchDetails({ match, onClose }) {
-  const [activeTab, setActiveTab] = useState('overview')
+  const [activeTab, setActiveTab] = useState('comments')
 
   if (!match) return null
 
   const tabs = [
-    { id: 'stats', label: 'Estatísticas', icon: '📊' },
-    { id: 'timeline', label: 'Timeline', icon: '⏱️' },
-    { id: 'heatmap', label: 'Heatmap', icon: '🔥' },
     { id: 'comments', label: 'Comentários', icon: '💬' },
+    { id: 'timeline', label: 'Timeline', icon: '⏱️' },
   ]
-
-  const homeTeam = {
-    name: match.home.name,
-    logo: match.home.crest,
-  }
-
-  const awayTeam = {
-    name: match.away.name,
-    logo: match.away.crest,
-  }
 
   return (
     <div className="fixed inset-0 z-50 flex items-end sm:items-center justify-center p-0 sm:p-4"
@@ -118,36 +104,16 @@ export default function MatchDetails({ match, onClose }) {
 
         {/* Conteúdo das Abas */}
         <div className="flex-1 overflow-y-auto">
-          {/* Estatísticas */}
-          {activeTab === 'stats' && (
-            <div className="p-6">
-              <MatchStats match={match} />
-            </div>
-          )}
-
-          {/* Timeline */}
-          {activeTab === 'timeline' && (
-            <div className="p-6">
-              <MatchTimeline match={match} />
-            </div>
-          )}
-
-          {/* Heatmap */}
-          {activeTab === 'heatmap' && (
-            <div className="p-6">
-              <PassHeatmap
-                matchId={match.id}
-                homeTeam={homeTeam}
-                awayTeam={awayTeam}
-              />
-            </div>
-          )}
-
           {/* Comentários */}
           {activeTab === 'comments' && (
             <div className="p-6">
               <Comments matchId={match.id} />
             </div>
+          )}
+
+          {/* Timeline (eventos reais do jogo) */}
+          {activeTab === 'timeline' && (
+            <MatchTimeline match={match} onClose={onClose} />
           )}
         </div>
       </div>

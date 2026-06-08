@@ -6,17 +6,19 @@
  * Callback para Web Vitals
  */
 function sendToAnalytics(metric) {
-  // Enviar para seu serviço de analytics
-  console.group('📊 Web Vitals')
-  console.log(`${metric.name}: ${metric.value.toFixed(2)}ms (${metric.rating})`)
-  console.table({
-    name: metric.name,
-    value: metric.value,
-    rating: metric.rating,
-    delta: metric.delta,
-    id: metric.id,
-  })
-  console.groupEnd()
+  // Log apenas em desenvolvimento (não polui o console em produção)
+  if (import.meta.env.DEV) {
+    console.group('📊 Web Vitals')
+    console.log(`${metric.name}: ${metric.value.toFixed(2)}ms (${metric.rating})`)
+    console.table({
+      name: metric.name,
+      value: metric.value,
+      rating: metric.rating,
+      delta: metric.delta,
+      id: metric.id,
+    })
+    console.groupEnd()
+  }
 
   // Opcional: Enviar para servidor
   if (navigator.sendBeacon) {
@@ -138,16 +140,18 @@ export function reportWebVitals() {
         const domReadyTime = perf.domContentLoadedEventEnd - perf.navigationStart
         const resourceLoadTime = perf.loadEventStart - perf.domContentLoadedEventEnd
 
-        console.group('⏱️ Navigation Timing')
-        console.log({
-          'Page Load': `${pageLoadTime}ms`,
-          'Connect': `${connectTime}ms`,
-          'Render': `${renderTime}ms`,
-          'Redirect': `${redirectTime}ms`,
-          'DOM Ready': `${domReadyTime}ms`,
-          'Resource Load': `${resourceLoadTime}ms`,
-        })
-        console.groupEnd()
+        if (import.meta.env.DEV) {
+          console.group('⏱️ Navigation Timing')
+          console.log({
+            'Page Load': `${pageLoadTime}ms`,
+            'Connect': `${connectTime}ms`,
+            'Render': `${renderTime}ms`,
+            'Redirect': `${redirectTime}ms`,
+            'DOM Ready': `${domReadyTime}ms`,
+            'Resource Load': `${resourceLoadTime}ms`,
+          })
+          console.groupEnd()
+        }
       }, 0)
     })
   }
