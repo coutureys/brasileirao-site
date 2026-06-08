@@ -268,7 +268,7 @@ function MatchCard({ match, scoreChanged, onTimeline, onComments, onDetails }) {
          className={`card overflow-hidden transition-all duration-200 cursor-pointer
       ${isLive      ? 'border-red-500/25 shadow-[0_0_20px_rgba(239,68,68,0.06)]' : ''}
       ${isHalfTime  ? 'border-amber-400/20' : ''}
-      hover:border-white/12 hover:bg-white/3`}>
+      hover:border-brand-green/20 hover:bg-white/[0.03] hover:-translate-y-0.5 hover:shadow-glow-sm`}>
 
       {isLive && !isHalfTime && (
         <div className="h-px w-full bg-gradient-to-r from-transparent via-red-500/60 to-transparent" />
@@ -297,10 +297,10 @@ function MatchCard({ match, scoreChanged, onTimeline, onComments, onDetails }) {
 
           {/* Home */}
           <div className="flex-1 flex items-center justify-end gap-1.5 sm:gap-3 min-w-0">
-            <Crest src={home.crest} name={home.name} />
-            <div className="text-right min-w-0 hidden sm:block">
-              <p className="font-bold text-base truncate leading-tight">{home.name}</p>
+            <div className="text-right min-w-0">
+              <p className="font-bold text-xs sm:text-base truncate leading-tight">{home.name}</p>
             </div>
+            <Crest src={home.crest} name={home.name} />
           </div>
 
           {/* Score */}
@@ -331,10 +331,10 @@ function MatchCard({ match, scoreChanged, onTimeline, onComments, onDetails }) {
 
           {/* Away */}
           <div className="flex-1 flex items-center gap-1.5 sm:gap-3 min-w-0">
-            <div className="min-w-0 hidden sm:block">
-              <p className="font-bold text-base truncate leading-tight">{away.name}</p>
-            </div>
             <Crest src={away.crest} name={away.name} />
+            <div className="min-w-0">
+              <p className="font-bold text-xs sm:text-base truncate leading-tight">{away.name}</p>
+            </div>
           </div>
 
         </div>
@@ -402,10 +402,25 @@ function GoalSummary({ goals, side }) {
 }
 
 function Crest({ src, name }) {
-  if (!src) return null
+  const [failed, setFailed] = useState(false)
+  if (src && !failed) {
+    return (
+      <img
+        src={src}
+        alt={name}
+        loading="lazy"
+        className="w-8 h-8 sm:w-10 sm:h-10 flex-shrink-0 object-contain drop-shadow-md"
+        onError={() => setFailed(true)}
+      />
+    )
+  }
+  // Fallback: círculo com as iniciais do time
   return (
-    <img src={src} alt="" className="w-8 h-8 sm:w-9 sm:h-9 flex-shrink-0 object-contain"
-         onError={e => { e.currentTarget.style.display = 'none' }} />
+    <div className="w-8 h-8 sm:w-10 sm:h-10 flex-shrink-0 rounded-full
+                    bg-white/10 border border-white/10
+                    flex items-center justify-center text-[10px] sm:text-xs font-black text-white/70">
+      {(name ?? '?').slice(0, 3).toUpperCase()}
+    </div>
   )
 }
 

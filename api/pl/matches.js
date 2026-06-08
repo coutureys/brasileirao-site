@@ -16,6 +16,11 @@ const STATUS = {
   STATUS_TIMED:       'AGENDADO',
 }
 
+// Escudo do time: usa o logo da ESPN ou monta a URL pelo id (mesmo padrão da tabela)
+const crestUrl = (team) =>
+  team?.logos?.[0]?.href ??
+  (team?.id ? `https://a.espncdn.com/i/teamlogos/soccer/500/${team.id}.png` : null)
+
 export default async function handler(req, res) {
   res.setHeader('Access-Control-Allow-Origin', '*')
   res.setHeader('Cache-Control', 's-maxage=30, stale-while-revalidate=10')
@@ -44,8 +49,8 @@ export default async function handler(req, res) {
         utcDate:     ev.date ?? null,
         matchday:    comp.notes?.[0]?.headline ?? null,
         venue:       comp.venue?.fullName ?? null,
-        homeTeam: { espnId: home.team?.id, name: home.team?.displayName ?? '', abbr: home.team?.abbreviation ?? '', tla: home.team?.abbreviation ?? '', crest: home.team?.logos?.[0]?.href ?? null, score: home.score != null ? parseInt(home.score) : null },
-        awayTeam: { espnId: away.team?.id, name: away.team?.displayName ?? '', abbr: away.team?.abbreviation ?? '', tla: away.team?.abbreviation ?? '', crest: away.team?.logos?.[0]?.href ?? null, score: away.score != null ? parseInt(away.score) : null },
+        homeTeam: { espnId: home.team?.id, name: home.team?.displayName ?? '', abbr: home.team?.abbreviation ?? '', tla: home.team?.abbreviation ?? '', crest: crestUrl(home.team), score: home.score != null ? parseInt(home.score) : null },
+        awayTeam: { espnId: away.team?.id, name: away.team?.displayName ?? '', abbr: away.team?.abbreviation ?? '', tla: away.team?.abbreviation ?? '', crest: crestUrl(away.team), score: away.score != null ? parseInt(away.score) : null },
         score: { fullTime: { home: home.score != null ? parseInt(home.score) : null, away: away.score != null ? parseInt(away.score) : null } },
       }
 
