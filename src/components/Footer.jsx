@@ -43,7 +43,7 @@ export default function Footer() {
             <h4 className="text-xs font-bold uppercase text-white/60 mb-3">Recursos</h4>
             <ul className="space-y-1.5">
               {[
-                { label: 'Analytics', to: '/analytics' },
+                { label: 'Tabela', to: '/tabela' },
                 { label: 'Favoritos', to: '/favoritos' },
                 { label: 'Jogadores', to: '/jogadores' },
               ].map(link => (

@@ -57,6 +57,7 @@ export default function CompeticoesPage() {
         </section>
 
         {/* === TODAS === */}
+        {others.length > 0 && (
         <section>
           <h2 className="text-xs font-bold uppercase tracking-wider text-white/50 mb-4">
             Todas as competições
@@ -80,6 +81,7 @@ export default function CompeticoesPage() {
             ))}
           </div>
         </section>
+        )}
 
       </div>
     </div>
