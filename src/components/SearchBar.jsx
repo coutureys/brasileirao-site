@@ -1,9 +1,12 @@
 /**
  * 🔍 SEARCH BAR AVANÇADA — Busca com autocomplete e filtros
+ * 🔐 Com validação de input e URL encoding seguro
  */
 import { useState, useEffect, useRef } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { LEAGUES } from '../leagues'
+import { SearchQuerySchema } from '../lib/validators'
+import { sanitizeText } from '../lib/sanitize'
 
 export default function SearchBar({ className = '' }) {
   const navigate = useNavigate()
@@ -89,12 +92,13 @@ export default function SearchBar({ className = '' }) {
 
   const handleSelect = (item) => {
     if (item.type === 'league' || item.isLeague) {
-      navigate(`/competition/${item.id}`)
+      navigate(`/competition/${encodeURIComponent(item.id)}`)
     } else if (item.type === 'team') {
-      navigate(`/competition/${item.league}`)
+      navigate(`/competition/${encodeURIComponent(item.league)}`)
     } else if (item.type === 'player') {
-      // TODO: Implementar página de jogador
-      navigate(`/jogadores?search=${item.name}`)
+      // 🔐 URL encode the search parameter
+      const encodedName = encodeURIComponent(sanitizeText(item.name))
+      navigate(`/jogadores?search=${encodedName}`)
     }
 
     setQuery('')
@@ -143,9 +147,16 @@ export default function SearchBar({ className = '' }) {
           type="text"
           placeholder="Buscar times, jogadores, ligas..."
           value={query}
-          onChange={(e) => setQuery(e.target.value)}
+          onChange={(e) => {
+            // 🔐 Validate input with Zod
+            const result = SearchQuerySchema.safeParse({ query: e.target.value })
+            if (result.success) {
+              setQuery(result.data.query)
+            }
+          }}
           onFocus={() => query && setShowResults(true)}
           onKeyDown={handleKeyDown}
+          maxLength={50}
           className="w-full pl-9 pr-4 py-2.5 bg-white/5 border border-brand-border rounded-lg
                      text-white text-sm placeholder-white/30
                      hover:border-brand-green/30 focus:border-brand-green

@@ -1,12 +1,22 @@
 import { useState, useEffect, useRef, useCallback } from 'react'
+import { CommentCreateSchema, CommentReplySchema } from '../lib/validators'
+import { sanitizeText } from '../lib/sanitize'
 
 const COLORS = ['#00E676','#3B82F6','#F59E0B','#EF4444','#8B5CF6','#EC4899','#06B6D4','#84CC16']
 
-/* ── Client ID persistente ──────────────────────────────────────────────── */
+/* ── Client ID persistente (com crypto seguro) ──────────────────────────── */
 function getClientId() {
   let id = localStorage.getItem('scoutfut_client')
   if (!id) {
-    id = Math.random().toString(36).slice(2) + Date.now().toString(36)
+    // 🔐 Use crypto.getRandomValues instead of Math.random
+    try {
+      const bytes = new Uint8Array(16)
+      crypto.getRandomValues(bytes)
+      id = Array.from(bytes, b => b.toString(16).padStart(2, '0')).join('')
+    } catch {
+      // Fallback para environments sem crypto
+      id = Math.random().toString(36).slice(2) + Date.now().toString(36)
+    }
     localStorage.setItem('scoutfut_client', id)
   }
   return id
@@ -77,13 +87,35 @@ export default function Comments({ matchId, matchTitle, onClose }) {
     if (!body.trim() || !username.trim()) return
     setSending(true); setError(null)
     try {
-      saveUser(username, color)
+      // 🔐 Validate input with Zod
+      const schema = replyTo ? CommentReplySchema : CommentCreateSchema
+      const validation = schema.safeParse({
+        matchId,
+        username: sanitizeText(username),
+        body: sanitizeText(body),
+        color,
+        clientId,
+        parentId: replyTo?.id ?? null,
+      })
+
+      if (!validation.success) {
+        setError(validation.error.issues[0]?.message || 'Dados inválidos')
+        return
+      }
+
+      const validData = validation.data
+      saveUser(validData.username, color)
+
       const r = await fetch('/api/comments', {
         method:  'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          action: 'create', matchId, username, color, clientId,
-          body: replyTo ? `@${replyTo.username} ${body}` : body,
+          action: 'create',
+          matchId: validData.matchId,
+          username: validData.username,
+          color: validData.color,
+          clientId: validData.clientId,
+          body: replyTo ? `@${sanitizeText(replyTo.username)} ${validData.body}` : validData.body,
           parentId: replyTo?.id ?? null,
         }),
       })

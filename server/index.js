@@ -4,6 +4,22 @@ import { readFileSync } from 'fs'
 import { resolve, dirname } from 'path'
 import { fileURLToPath } from 'url'
 
+// 🔐 Security imports
+import {
+  setupSecurityHeaders,
+  setupCORS,
+  generalLimiter,
+  limitRequestSize,
+  validateContentType,
+  stripSensitiveHeaders,
+  logSecurityEvents,
+  errorHandler,
+} from '../api/middleware/security.js'
+import {
+  setCSRFSessionCookie,
+  serveCsrfToken,
+} from '../api/middleware/csrf.js'
+
 // Carrega .env manualmente (sem import de dotenv no topo pra não quebrar se arquivo sumir)
 try {
   const envPath = resolve(dirname(fileURLToPath(import.meta.url)), '..', '.env')
@@ -21,7 +37,18 @@ const API_BASE = 'https://api.football-data.org/v4'
 const PORT     = Number(process.env.PORT ?? 3001)
 
 const app = express()
-app.use(cors({ origin: ['http://localhost:5173', 'http://localhost:4173'] }))
+
+// 🔐 SECURITY MIDDLEWARE
+app.use(express.json({ limit: '10kb' }))
+app.use(express.urlencoded({ limit: '10kb', extended: true }))
+app.use(setupSecurityHeaders())
+app.use(setupCORS())
+app.use(generalLimiter)
+app.use(limitRequestSize())
+app.use(validateContentType())
+app.use(stripSensitiveHeaders)
+app.use(logSecurityEvents)
+app.use(setCSRFSessionCookie)
 
 // ── Cache simples em memória ──────────────────────────────────────────────
 const cache = new Map()
@@ -113,6 +140,12 @@ app.get('/api/health', (_req, res) => {
     keyConfigured: Boolean(API_KEY && API_KEY !== 'insira_sua_chave_aqui'),
   })
 })
+
+// 🛡️ CSRF Token endpoint
+app.get('/api/csrf-token', serveCsrfToken)
+
+// 🚨 Global error handler (must be last)
+app.use(errorHandler)
 
 app.listen(PORT, () => {
   const keyOk = API_KEY && API_KEY !== 'insira_sua_chave_aqui'
