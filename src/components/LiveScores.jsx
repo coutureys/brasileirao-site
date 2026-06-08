@@ -39,10 +39,10 @@ const DEMO_GOALS = [
 ]
 
 const FILTERS = [
-  { key: 'ALL',      label: 'Todos'       },
-  { key: 'LIVE',     label: 'Ao Vivo'     },
-  { key: 'FT',       label: 'Finalizados' },
-  { key: 'UPCOMING', label: 'Em Breve'    },
+  { key: 'ALL',        label: 'Todos'       },
+  { key: 'IN_PLAY',    label: 'Ao Vivo'     },
+  { key: 'FINISHED',   label: 'Finalizados' },
+  { key: 'SCHEDULED',  label: 'Em Breve'    },
 ]
 
 function simulateGoal(matches, soundEnabled) {
