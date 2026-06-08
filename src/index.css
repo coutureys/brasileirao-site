@@ -1,0 +1,115 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  /* === MODO ESCURO (DEFAULT) === */
+  :root, html.dark {
+    --bg-primary: #080B14;
+    --bg-secondary: #0F1523;
+    --bg-tertiary: #161D2E;
+    --text-primary: #ffffff;
+    --text-secondary: rgba(255, 255, 255, 0.6);
+    --text-tertiary: rgba(255, 255, 255, 0.4);
+    --border-color: #1E2A40;
+    --brand-green: #00E676;
+  }
+
+  /* === MODO CLARO === */
+  html.light {
+    --bg-primary: #f9fafb;
+    --bg-secondary: #ffffff;
+    --bg-tertiary: #f3f4f6;
+    --text-primary: #0f172a;
+    --text-secondary: rgba(15, 23, 42, 0.6);
+    --text-tertiary: rgba(15, 23, 42, 0.4);
+    --border-color: #e5e7eb;
+    --brand-green: #10b981;
+  }
+
+  html {
+    scroll-behavior: smooth;
+    overflow-x: hidden;
+  }
+
+  body {
+    @apply bg-brand-dark text-white font-sans antialiased;
+    background-color: var(--bg-primary);
+    color: var(--text-primary);
+    transition: background-color 0.3s, color 0.3s;
+    background-image:
+      radial-gradient(ellipse 80% 50% at 50% -20%, rgba(0,230,118,0.07) 0%, transparent 60%),
+      radial-gradient(ellipse 60% 40% at 80% 110%, rgba(0,100,255,0.05) 0%, transparent 60%);
+    background-attachment: fixed;
+    padding-left:  env(safe-area-inset-left);
+    padding-right: env(safe-area-inset-right);
+    -webkit-tap-highlight-color: transparent;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  button, a { -webkit-tap-highlight-color: transparent; }
+  button:focus-visible, a:focus-visible {
+    @apply outline outline-2 outline-brand-green outline-offset-2 rounded;
+  }
+}
+
+@layer components {
+  /* Card padrão */
+  .card {
+    @apply bg-brand-card border border-brand-border rounded-2xl shadow-card;
+    transition: border-color 0.2s, box-shadow 0.2s;
+  }
+  .card:hover { @apply border-white/15; }
+  .card-interactive {
+    @apply card cursor-pointer;
+  }
+  .card-interactive:hover {
+    @apply border-brand-green/20 shadow-glow-sm -translate-y-0.5;
+    transition: all 0.2s;
+  }
+
+  /* Badge ao vivo */
+  .badge-live {
+    @apply inline-flex items-center gap-1.5 px-2.5 py-1
+           rounded-full bg-red-500/10 text-red-400 text-xs font-bold
+           border border-red-500/20;
+  }
+  .badge-live::before {
+    content: '';
+    @apply w-1.5 h-1.5 rounded-full bg-red-500 animate-pulse;
+  }
+
+  /* Chip de status */
+  .chip {
+    @apply inline-flex items-center px-2.5 py-1 rounded-lg
+           text-xs font-semibold bg-white/5 border border-white/10;
+  }
+
+  /* Padding bottom do bottom nav */
+  .pb-nav { padding-bottom: calc(4.5rem + env(safe-area-inset-bottom)); }
+  .h-nav  { height: calc(3.75rem + env(safe-area-inset-bottom)); }
+  .pt-nav-safe { padding-bottom: env(safe-area-inset-bottom); }
+
+  /* Gradiente de texto */
+  .text-gradient {
+    @apply bg-gradient-to-r from-brand-green to-emerald-300 bg-clip-text text-transparent;
+  }
+
+  /* Divisor com gradiente */
+  .divider {
+    @apply h-px w-full bg-gradient-to-r from-transparent via-brand-border to-transparent;
+  }
+
+  /* Section header padrão */
+  .section-tag  { @apply text-xs font-bold text-brand-green uppercase tracking-widest; }
+  .section-title { @apply text-2xl sm:text-4xl font-extrabold tracking-tight; }
+}
+
+/* Scrollbar */
+::-webkit-scrollbar       { width: 3px; height: 3px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.15); border-radius: 99px; }
+::-webkit-scrollbar-thumb:hover { background: rgba(255,255,255,0.25); }
+
+/* Animação de entrada nas seções */
+.animate-section { @apply animate-fade-in; }
