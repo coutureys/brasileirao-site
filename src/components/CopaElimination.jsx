@@ -85,8 +85,8 @@ export default function CopaElimination({ league = 'bra.copa', leagueInfo }) {
         <div className="space-y-8">
           {rounds.map((round, roundIdx) => {
             const phaseName = phaseNames[round.name] || round.name
-            const isDone = round.games.every(g => g.status === 'FT')
-            const isLive = round.games.some(g => g.status === 'LIVE')
+            const isDone = round.games.every(g => g.status === 'FINISHED')
+            const isLive = round.games.some(g => g.status === 'IN_PLAY')
 
             return (
               <div key={roundIdx} className="card overflow-hidden">
@@ -144,8 +144,8 @@ export default function CopaElimination({ league = 'bra.copa', leagueInfo }) {
 function ElimMatch({ match, leagueInfo }) {
   const homeWin = match.home.score > match.away.score
   const awayWin = match.away.score > match.home.score
-  const isDone = match.status === 'FT'
-  const isLive = match.status === 'LIVE'
+  const isDone = match.status === 'FINISHED'
+  const isLive = match.status === 'IN_PLAY'
 
   return (
     <div className="px-6 py-4 hover:bg-white/5 transition">

@@ -2,8 +2,8 @@ import { useMatches } from '../hooks/useFootball'
 
 export default function Hero() {
   const { matches } = useMatches()
-  const liveNow = (matches ?? []).filter(m => m.status === 'LIVE')
-  const latestResult = (matches ?? []).filter(m => m.status === 'FT')[0]
+  const liveNow = (matches ?? []).filter(m => m.status === 'IN_PLAY')
+  const latestResult = (matches ?? []).filter(m => m.status === 'FINISHED')[0]
 
   return (
     <section id="inicio" className="relative overflow-hidden">

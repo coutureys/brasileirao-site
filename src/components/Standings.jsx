@@ -370,8 +370,8 @@ function TeamCrest({ crest, name, abbr, size = 'md', className = '' }) {
 }
 
 function KnockoutMatch({ match: m, leagueInfo }) {
-  const isLive = m.status === 'LIVE'
-  const isFt   = m.status === 'FT'
+  const isLive = m.status === 'IN_PLAY'
+  const isFt   = m.status === 'FINISHED'
   const hWin   = isFt && Number(m.home.score) > Number(m.away.score)
   const aWin   = isFt && Number(m.away.score) > Number(m.home.score)
 

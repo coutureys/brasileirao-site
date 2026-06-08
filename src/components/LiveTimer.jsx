@@ -99,8 +99,8 @@ export function useLiveTimer({ minute, serverTs, isHalfTime, status }) {
 export default function LiveTimer({ minute, serverTs, isHalfTime, status, size = 'md' }) {
   const { minutes, seconds, extra } = useLiveTimer({ minute, serverTs, isHalfTime, status })
 
-  const isLive     = status === 'LIVE'
-  const isFt       = status === 'FT'
+  const isLive     = status === 'IN_PLAY'
+  const isFt       = status === 'FINISHED'
 
   // Tamanhos
   const sizes = {

@@ -192,7 +192,7 @@ function KnockoutPhase({ matches, title, leagueInfo }) {
 function KnockoutMatch({ match }) {
   const homeWin = match.home.score > match.away.score
   const awayWin = match.away.score > match.home.score
-  const isDone = match.status === 'FT'
+  const isDone = match.status === 'FINISHED'
 
   return (
     <div className="card p-4 sm:p-6">
@@ -271,7 +271,7 @@ function FinalPhase({ match, leagueInfo }) {
     )
   }
 
-  const isDone = match.status === 'FT'
+  const isDone = match.status === 'FINISHED'
   const homeWin = match.home.score > match.away.score
 
   return (

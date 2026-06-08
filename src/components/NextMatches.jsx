@@ -6,7 +6,7 @@ import { PredictionModal } from './Prediction'
 export default function NextMatches({ league = 'bra.1', leagueInfo }) {
   const { matches, loading, error, source, refetch } = useMatches(league)
   const { standings } = useStandings(league)
-  const upcoming = (matches ?? []).filter((m) => m.status === 'UPCOMING').slice(0, 6)
+  const upcoming = (matches ?? []).filter((m) => m.status === 'SCHEDULED').slice(0, 6)
   const [predMatch, setPredMatch] = useState(null)
   const [showSimulator, setShowSimulator] = useState(false)
   const [simHome, setSimHome] = useState('')

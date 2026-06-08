@@ -73,9 +73,9 @@ export default function MatchDetails({ match, onClose }) {
                   {match.home.score ?? '—'}
                 </div>
                 <p className="text-white/40 text-xs">
-                  {match.status === 'LIVE' && '🔴 AO VIVO'}
-                  {match.status === 'FT' && '✓ Encerrada'}
-                  {match.status === 'UPCOMING' && '⏳ Agendada'}
+                  {match.status === 'IN_PLAY' && '🔴 AO VIVO'}
+                  {match.status === 'FINISHED' && '✓ Encerrada'}
+                  {match.status === 'SCHEDULED' && '⏳ Agendada'}
                 </p>
                 <div className="text-2xl text-white/50">—</div>
                 <div className="text-4xl sm:text-5xl font-black text-white tabular-nums">

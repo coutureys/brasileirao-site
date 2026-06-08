@@ -102,7 +102,7 @@ export default function LiveScores({ league = 'bra.1', leagueInfo, compact = fal
   const allGoals = [...newGoals, ...simGoals]
 
   const allMatches = matches ?? []
-  const liveCount  = allMatches.filter(m => m.status === 'LIVE').length
+  const liveCount  = allMatches.filter(m => m.status === 'IN_PLAY').length
   const filtered   = compact
     ? allMatches.slice(0, 4)   // Modo compacto: só 4 jogos na home
     : filter === 'ALL'

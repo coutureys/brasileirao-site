@@ -182,7 +182,7 @@ export function useLiveScores({
     fetchMatches(true)
 
     const tick = () => {
-      const hasLive = matches.some(m => m.status === 'LIVE')
+      const hasLive = matches.some(m => m.status === 'IN_PLAY')
       const delay   = hasLive ? liveInterval : idleInterval
       intervalRef.current = setTimeout(() => { fetchMatches(); }, delay)
     }
