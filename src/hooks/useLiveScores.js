@@ -143,6 +143,7 @@ export function useLiveScores({
         serverTs:   m.serverTs  ?? Date.now(),
         round:      m.matchday ? `Rodada ${m.matchday}` : '—',
         stadium:    m.venue ?? '—',
+        utcDate: m.utcDate ?? null,
         kickoff: m.utcDate ? new Date(m.utcDate).toLocaleTimeString('pt-BR', { hour:'2-digit', minute:'2-digit', timeZone:'America/Sao_Paulo' }) : '',
         date:    m.utcDate ? new Date(m.utcDate).toLocaleDateString('pt-BR', { day:'2-digit', month:'2-digit', timeZone:'America/Sao_Paulo' }) : '',
         home: {
@@ -161,9 +162,9 @@ export function useLiveScores({
       }))
 
       const normalized = [
-        ...normalize(data.live     ?? [], 'LIVE'),
-        ...normalize(data.results  ?? [], 'FT'),
-        ...normalize(data.upcoming ?? [], 'UPCOMING'),
+        ...normalize(data.live     ?? [], 'IN_PLAY'),
+        ...normalize(data.results  ?? [], 'FINISHED'),
+        ...normalize(data.upcoming ?? [], 'SCHEDULED'),
       ]
 
       setMatches(normalized)
@@ -198,7 +199,7 @@ export function useLiveScores({
   // Re-agenda após cada fetch
   useEffect(() => {
     if (loading) return
-    const hasLive = matches.some(m => m.status === 'LIVE')
+    const hasLive = matches.some(m => m.status === 'IN_PLAY')
     const delay   = hasLive ? liveInterval : idleInterval
 
     if (intervalRef.current) clearTimeout(intervalRef.current)

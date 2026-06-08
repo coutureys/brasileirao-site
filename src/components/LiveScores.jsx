@@ -47,7 +47,7 @@ const FILTERS = [
 
 function simulateGoal(matches, soundEnabled) {
   // Pega um time aleatório dos matches ou dos demos
-  const teams = matches.filter(m => m.status !== 'UPCOMING')
+  const teams = matches.filter(m => m.status !== 'SCHEDULED')
   const pick  = teams.length > 0
     ? { team: teams[Math.floor(Math.random() * teams.length)].home.name, score: `${Math.floor(Math.random()*3)+1}-${Math.floor(Math.random()*2)}` }
     : DEMO_GOALS[Math.floor(Math.random() * DEMO_GOALS.length)]
@@ -250,12 +250,18 @@ function GoalToast({ goals }) {
 
 /* ── Match Card ──────────────────────────────────────────────────────────── */
 function MatchCard({ match, scoreChanged, onTimeline, onComments, onDetails }) {
-  const { home, away, status, minute, period, isHalfTime, serverTs, kickoff, date, stadium } = match
+  const { home, away, status, minute, period, isHalfTime, serverTs, kickoff, date, utcDate, stadium } = match
   const isLive     = status === 'IN_PLAY'
   const isFt       = status === 'FINISHED'
   const isUpcoming = status === 'SCHEDULED'
   const homeWin    = home.score > away.score
   const awayWin    = away.score > home.score
+
+  // Formata data completa (dd/mm/aaaa) a partir do ISO bruto, com proteção
+  const matchDate = utcDate ? new Date(utcDate) : null
+  const dateLabel = matchDate && !isNaN(matchDate.getTime())
+    ? matchDate.toLocaleDateString('pt-BR', { day: '2-digit', month: '2-digit', year: 'numeric', timeZone: 'America/Sao_Paulo' })
+    : null
 
   return (
     <div onClick={onDetails}
@@ -335,9 +341,9 @@ function MatchCard({ match, scoreChanged, onTimeline, onComments, onDetails }) {
 
         {/* Data + Stadium */}
         <div className="space-y-1 mt-2">
-          {date && (
+          {dateLabel && (
             <p className="text-[10px] sm:text-xs text-white/40">
-              📅 {new Date(date).toLocaleDateString('pt-BR', { day: '2-digit', month: '2-digit', year: 'numeric' })}
+              📅 {dateLabel}
             </p>
           )}
           {stadium && stadium !== '—' ? (
