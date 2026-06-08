@@ -333,8 +333,13 @@ function MatchCard({ match, scoreChanged, onTimeline, onComments, onDetails }) {
 
         </div>
 
-        {/* Stadium + botão timeline */}
-        <div className="flex items-center justify-between mt-2">
+        {/* Data + Stadium */}
+        <div className="space-y-1 mt-2">
+          {date && (
+            <p className="text-[10px] sm:text-xs text-white/40">
+              📅 {new Date(date).toLocaleDateString('pt-BR', { day: '2-digit', month: '2-digit', year: 'numeric' })}
+            </p>
+          )}
           {stadium && stadium !== '—' ? (
             <div className="flex items-center gap-1.5 text-[10px] sm:text-[11px] text-white/30">
               <svg className="w-3 h-3 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -343,9 +348,7 @@ function MatchCard({ match, scoreChanged, onTimeline, onComments, onDetails }) {
               </svg>
               {stadium}
             </div>
-          ) : <div />}
-
-          {/* Botões removidos - click simples no card */}
+          ) : null}
         </div>
       </div>
     </div>
