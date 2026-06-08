@@ -12,13 +12,13 @@ const KIND_STYLE = {
 }
 
 /* ── Modal de timeline ─────────────────────────────────────────────────── */
-export default function MatchTimeline({ match, onClose }) {
+export default function MatchTimeline({ match, onClose, embedded = false }) {
   const [events,  setEvents]  = useState([])
   const [loading, setLoading] = useState(true)
   const [detail,  setDetail]  = useState(null)
 
   useEffect(() => {
-    const fn = e => { if (e.key === 'Escape') { detail ? setDetail(null) : onClose() } }
+    const fn = e => { if (e.key === 'Escape') { detail ? setDetail(null) : onClose?.() } }
     document.addEventListener('keydown', fn)
     return () => document.removeEventListener('keydown', fn)
   }, [onClose, detail])
@@ -34,9 +34,48 @@ export default function MatchTimeline({ match, onClose }) {
 
   const isHome = side => side === 'home'
 
+  const timelineBody = loading ? (
+    <TimelineSkeletons />
+  ) : events.length === 0 ? (
+    <div className="text-center py-16 text-white/30">
+      <p className="text-4xl mb-3">📋</p>
+      <p className="font-semibold">Nenhum evento registrado</p>
+      <p className="text-sm mt-1 text-white/20">Os eventos aparecem durante o jogo</p>
+    </div>
+  ) : (
+    <div className="relative">
+      {/* Linha central */}
+      <div className="absolute left-1/2 -translate-x-px top-0 bottom-0 w-0.5 bg-white/8 rounded-full" />
+
+      <div className="space-y-4">
+        {events.map((ev, i) => (
+          <TimelineEvent key={ev.id} event={ev} index={i} onClick={() => setDetail(ev)} />
+        ))}
+      </div>
+
+      {/* Final */}
+      <div className="flex justify-center mt-6">
+        <div className="flex items-center gap-2 px-4 py-2 rounded-full
+                        bg-white/5 border border-white/10 text-white/30 text-xs font-bold">
+          🏁 Final
+        </div>
+      </div>
+    </div>
+  )
+
+  // Modo embutido (dentro do MatchDetails): só a timeline, sem modal próprio
+  if (embedded) {
+    return (
+      <div className="relative flex flex-col flex-1 min-h-0">
+        <div className="flex-1 overflow-y-auto px-4 py-6">{timelineBody}</div>
+        {detail && <EventDetail event={detail} onClose={() => setDetail(null)} />}
+      </div>
+    )
+  }
+
   return (
     <div className="fixed inset-0 z-50 flex items-end sm:items-center justify-center p-0 sm:p-4"
-         onClick={() => detail ? setDetail(null) : onClose()}>
+         onClick={() => detail ? setDetail(null) : onClose?.()}>
       <div className="absolute inset-0 bg-black/80 backdrop-blur-sm" />
 
       <div className="relative w-full sm:max-w-lg bg-brand-card border border-brand-border
@@ -69,41 +108,7 @@ export default function MatchTimeline({ match, onClose }) {
         </div>
 
         {/* Timeline scrollável */}
-        <div className="flex-1 overflow-y-auto px-4 py-6">
-          {loading ? (
-            <TimelineSkeletons />
-          ) : events.length === 0 ? (
-            <div className="text-center py-16 text-white/30">
-              <p className="text-4xl mb-3">📋</p>
-              <p className="font-semibold">Nenhum evento registrado</p>
-              <p className="text-sm mt-1 text-white/20">Os eventos aparecem durante o jogo</p>
-            </div>
-          ) : (
-            <div className="relative">
-              {/* Linha central */}
-              <div className="absolute left-1/2 -translate-x-px top-0 bottom-0 w-0.5 bg-white/8 rounded-full" />
-
-              <div className="space-y-4">
-                {events.map((ev, i) => (
-                  <TimelineEvent
-                    key={ev.id}
-                    event={ev}
-                    index={i}
-                    onClick={() => setDetail(ev)}
-                  />
-                ))}
-              </div>
-
-              {/* Final */}
-              <div className="flex justify-center mt-6">
-                <div className="flex items-center gap-2 px-4 py-2 rounded-full
-                                bg-white/5 border border-white/10 text-white/30 text-xs font-bold">
-                  🏁 Final
-                </div>
-              </div>
-            </div>
-          )}
-        </div>
+        <div className="flex-1 overflow-y-auto px-4 py-6">{timelineBody}</div>
       </div>
 
       {/* Detail popup */}

@@ -103,17 +103,15 @@ export default function MatchDetails({ match, onClose }) {
         </div>
 
         {/* Conteúdo das Abas */}
-        <div className="flex-1 overflow-y-auto">
+        <div className="flex-1 min-h-0 flex flex-col">
           {/* Comentários */}
           {activeTab === 'comments' && (
-            <div className="p-6">
-              <Comments matchId={match.id} />
-            </div>
+            <Comments matchId={match.id} embedded onClose={onClose} />
           )}
 
           {/* Timeline (eventos reais do jogo) */}
           {activeTab === 'timeline' && (
-            <MatchTimeline match={match} onClose={onClose} />
+            <MatchTimeline match={match} embedded onClose={onClose} />
           )}
         </div>
       </div>

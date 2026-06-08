@@ -43,7 +43,7 @@ function timeAgo(iso) {
 }
 
 /* ── Modal de comentários ────────────────────────────────────────────────── */
-export default function Comments({ matchId, matchTitle, onClose }) {
+export default function Comments({ matchId, matchTitle, onClose, embedded = false }) {
   const clientId    = useRef(getClientId()).current
   const saved       = getSavedUser()
 
@@ -78,7 +78,7 @@ export default function Comments({ matchId, matchTitle, onClose }) {
 
   // ESC fecha
   useEffect(() => {
-    const fn = e => { if (e.key === 'Escape') onClose() }
+    const fn = e => { if (e.key === 'Escape') onClose?.() }
     document.addEventListener('keydown', fn)
     return () => document.removeEventListener('keydown', fn)
   }, [onClose])
@@ -150,22 +150,17 @@ export default function Comments({ matchId, matchTitle, onClose }) {
     ))
   }
 
-  return (
-    <div className="fixed inset-0 z-50 flex items-end sm:items-center justify-center p-0 sm:p-4"
-         onClick={onClose}>
-      <div className="absolute inset-0 bg-black/80 backdrop-blur-sm" />
-
-      <div className="relative w-full sm:max-w-lg bg-brand-card border border-brand-border
-                      rounded-t-3xl sm:rounded-3xl shadow-2xl max-h-[92vh] flex flex-col"
-           onClick={e => e.stopPropagation()}>
-
+  const inner = (
+    <>
         {/* Header */}
         <div className="flex-shrink-0 px-5 py-4 border-b border-brand-border flex items-center justify-between">
-          <div>
-            <p className="text-[10px] text-white/30 uppercase tracking-wider font-bold">💬 Ao Vivo</p>
-            <h3 className="font-black text-base mt-0.5 truncate max-w-[260px]">{matchTitle}</h3>
-          </div>
-          <div className="flex items-center gap-3">
+          {!embedded && (
+            <div>
+              <p className="text-[10px] text-white/30 uppercase tracking-wider font-bold">💬 Ao Vivo</p>
+              <h3 className="font-black text-base mt-0.5 truncate max-w-[260px]">{matchTitle}</h3>
+            </div>
+          )}
+          <div className="flex items-center gap-3 ml-auto">
             {/* Sort */}
             <div className="flex gap-0.5 p-0.5 rounded-lg bg-white/5 border border-white/8">
               {['recent','likes'].map(s => (
@@ -176,9 +171,11 @@ export default function Comments({ matchId, matchTitle, onClose }) {
                 </button>
               ))}
             </div>
-            <button onClick={onClose}
-                    className="w-8 h-8 rounded-full bg-white/8 flex items-center justify-center
-                               hover:bg-white/15 transition text-white/50 text-sm">✕</button>
+            {!embedded && (
+              <button onClick={onClose}
+                      className="w-8 h-8 rounded-full bg-white/8 flex items-center justify-center
+                                 hover:bg-white/15 transition text-white/50 text-sm">✕</button>
+            )}
           </div>
         </div>
 
@@ -304,6 +301,23 @@ export default function Comments({ matchId, matchTitle, onClose }) {
             </div>
           </div>
         )}
+    </>
+  )
+
+  // Modo embutido (dentro do MatchDetails): sem modal/backdrop próprios
+  if (embedded) {
+    return <div className="flex flex-col flex-1 min-h-0">{inner}</div>
+  }
+
+  return (
+    <div className="fixed inset-0 z-50 flex items-end sm:items-center justify-center p-0 sm:p-4"
+         onClick={onClose}>
+      <div className="absolute inset-0 bg-black/80 backdrop-blur-sm" />
+
+      <div className="relative w-full sm:max-w-lg bg-brand-card border border-brand-border
+                      rounded-t-3xl sm:rounded-3xl shadow-2xl max-h-[92vh] flex flex-col"
+           onClick={e => e.stopPropagation()}>
+        {inner}
       </div>
     </div>
   )
