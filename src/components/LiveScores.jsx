@@ -251,9 +251,9 @@ function GoalToast({ goals }) {
 /* ── Match Card ──────────────────────────────────────────────────────────── */
 function MatchCard({ match, scoreChanged, onTimeline, onComments, onDetails }) {
   const { home, away, status, minute, period, isHalfTime, serverTs, kickoff, date, stadium } = match
-  const isLive     = status === 'LIVE'
-  const isFt       = status === 'FT'
-  const isUpcoming = status === 'UPCOMING'
+  const isLive     = status === 'IN_PLAY'
+  const isFt       = status === 'FINISHED'
+  const isUpcoming = status === 'SCHEDULED'
   const homeWin    = home.score > away.score
   const awayWin    = away.score > home.score
 
@@ -305,14 +305,14 @@ function MatchCard({ match, scoreChanged, onTimeline, onComments, onDetails }) {
                 <p className="text-xs text-brand-green font-bold mt-0.5">{kickoff}</p>
               </div>
             ) : (
-              <div className="flex items-center gap-1 sm:gap-3">
+              <div className="flex items-center justify-center gap-2 sm:gap-4 flex-shrink-0">
                 <ScoreBox
                   score={home.score}
                   winning={homeWin}
                   live={isLive}
                   flash={scoreChanged?.home}
                 />
-                <span className="text-white/20 text-lg">–</span>
+                <span className="text-white/30 text-xl font-light">—</span>
                 <ScoreBox
                   score={away.score}
                   winning={awayWin}
