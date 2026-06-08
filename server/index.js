@@ -14,11 +14,11 @@ import {
   stripSensitiveHeaders,
   logSecurityEvents,
   errorHandler,
-} from '../api/middleware/security.js'
+} from '../lib/middleware/security.js'
 import {
   setCSRFSessionCookie,
   serveCsrfToken,
-} from '../api/middleware/csrf.js'
+} from '../lib/middleware/csrf.js'
 
 // Carrega .env manualmente (sem import de dotenv no topo pra não quebrar se arquivo sumir)
 try {
