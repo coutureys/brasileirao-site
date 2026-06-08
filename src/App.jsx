@@ -18,6 +18,8 @@ import AnalyticsPage    from './pages/AnalyticsPage'
 import CompetitionPage  from './pages/CompetitionPage'
 
 import { getLeague } from './leagues'
+import { PlanProvider } from './context/PlanContext'
+import PlanSwitcher from './components/PlanSwitcher'
 
 export default function App() {
   const [league, setLeague] = useState('bra.1')
@@ -27,7 +29,8 @@ export default function App() {
 
   return (
     <ThemeProvider>
-      <BrowserRouter>
+      <PlanProvider>
+        <BrowserRouter>
         <div className="min-h-screen flex flex-col">
         <Header />
 
@@ -57,8 +60,10 @@ export default function App() {
 
         <Footer />
         <BottomNav />
+        <PlanSwitcher />
         </div>
       </BrowserRouter>
+      </PlanProvider>
     </ThemeProvider>
   )
 }
