@@ -1,5 +1,4 @@
 import express from 'express'
-import cors from 'cors'
 import { readFileSync } from 'fs'
 import { resolve, dirname } from 'path'
 import { fileURLToPath } from 'url'
@@ -20,6 +19,23 @@ import {
   serveCsrfToken,
 } from '../lib/middleware/csrf.js'
 
+// ⚙️ Handlers serverless — REAPROVEITADOS da pasta api/ (a mesma lógica
+//    que roda na Vercel). Assim o dev local fica idêntico à produção:
+//    dados da ESPN, sem precisar de chave, com todos os endpoints novos.
+import matchesHandler     from '../api/pl/matches.js'
+import matchEventsHandler from '../api/pl/match-events.js'
+import matchStatsHandler  from '../api/pl/match-stats.js'
+import standingsHandler   from '../api/pl/standings.js'
+import phasesHandler      from '../api/pl/phases.js'
+import commentsHandler    from '../api/comments.js'
+import newsHandler        from '../api/scrape/news.js'
+import pushHandler        from '../api/push/subscribe.js'
+import dbMatchesHandler   from '../api/db/matches.js'
+import dbPlayersHandler   from '../api/db/players.js'
+import dbTeamsHandler     from '../api/db/teams.js'
+import dbSyncHandler      from '../api/db/sync.js'
+import healthHandler      from '../api/health.js'
+
 // Carrega .env manualmente (sem import de dotenv no topo pra não quebrar se arquivo sumir)
 try {
   const envPath = resolve(dirname(fileURLToPath(import.meta.url)), '..', '.env')
@@ -32,9 +48,7 @@ try {
   }
 } catch { /* .env não encontrado, usa variáveis de ambiente do sistema */ }
 
-const API_KEY  = process.env.FOOTBALL_API_KEY
-const API_BASE = 'https://api.football-data.org/v4'
-const PORT     = Number(process.env.PORT ?? 3001)
+const PORT = Number(process.env.PORT ?? 3001)
 
 const app = express()
 
@@ -50,96 +64,24 @@ app.use(stripSensitiveHeaders)
 app.use(logSecurityEvents)
 app.use(setCSRFSessionCookie)
 
-// ── Cache simples em memória ──────────────────────────────────────────────
-const cache = new Map()
+// Adapta um handler serverless (req,res) para o Express, capturando erros async
+const route = (handler) => (req, res, next) =>
+  Promise.resolve(handler(req, res)).catch(next)
 
-async function apiFetch(path, ttlMs = 60_000) {
-  const hit = cache.get(path)
-  if (hit && Date.now() - hit.ts < ttlMs) return hit.data
-
-  if (!API_KEY || API_KEY === 'insira_sua_chave_aqui') {
-    throw new Error('API_KEY_MISSING')
-  }
-
-  const res = await fetch(`${API_BASE}${path}`, {
-    headers: { 'X-Auth-Token': API_KEY },
-  })
-
-  if (res.status === 429) throw new Error('RATE_LIMITED')
-  if (!res.ok) throw new Error(`API_ERROR_${res.status}`)
-
-  const data = await res.json()
-  cache.set(path, { data, ts: Date.now() })
-  return data
-}
-
-function handleError(res, err) {
-  const code = err.message
-  if (code === 'API_KEY_MISSING')
-    return res.status(401).json({ error: 'API_KEY_MISSING', hint: 'Adicione FOOTBALL_API_KEY no arquivo .env' })
-  if (code === 'RATE_LIMITED')
-    return res.status(429).json({ error: 'RATE_LIMITED', hint: 'Limite de 10 req/min atingido' })
-  console.error('[server]', err.message)
-  res.status(500).json({ error: err.message })
-}
-
-// ── Rotas ─────────────────────────────────────────────────────────────────
-
-// Classificação — cache 5 min (muda apenas após rodadas)
-app.get('/api/pl/standings', async (req, res) => {
-  try {
-    const data = await apiFetch('/competitions/PL/standings', 5 * 60_000)
-    res.json(data)
-  } catch (err) { handleError(res, err) }
-})
-
-// Jogos ao vivo — cache 30 s
-app.get('/api/pl/matches/live', async (req, res) => {
-  try {
-    const data = await apiFetch('/competitions/PL/matches?status=LIVE', 30_000)
-    res.json(data)
-  } catch (err) { handleError(res, err) }
-})
-
-// Próximos jogos — cache 2 min
-app.get('/api/pl/matches/upcoming', async (req, res) => {
-  try {
-    const data = await apiFetch('/competitions/PL/matches?status=SCHEDULED&limit=10', 2 * 60_000)
-    res.json(data)
-  } catch (err) { handleError(res, err) }
-})
-
-// Resultados recentes — cache 5 min
-app.get('/api/pl/matches/results', async (req, res) => {
-  try {
-    const data = await apiFetch('/competitions/PL/matches?status=FINISHED&limit=10', 5 * 60_000)
-    res.json(data)
-  } catch (err) { handleError(res, err) }
-})
-
-// Endpoint combinado (scores page) — faz 3 chamadas mas cada uma tem cache próprio
-app.get('/api/pl/matches', async (req, res) => {
-  try {
-    const [live, upcoming, results] = await Promise.all([
-      apiFetch('/competitions/PL/matches?status=LIVE',            30_000),
-      apiFetch('/competitions/PL/matches?status=SCHEDULED&limit=10', 2 * 60_000),
-      apiFetch('/competitions/PL/matches?status=FINISHED&limit=10',  5 * 60_000),
-    ])
-    res.json({
-      live:     live.matches     ?? [],
-      upcoming: upcoming.matches ?? [],
-      results:  results.matches  ?? [],
-    })
-  } catch (err) { handleError(res, err) }
-})
-
-// Health-check — frontend usa pra saber se backend está de pé
-app.get('/api/health', (_req, res) => {
-  res.json({
-    ok: true,
-    keyConfigured: Boolean(API_KEY && API_KEY !== 'insira_sua_chave_aqui'),
-  })
-})
+// ── Rotas (mesmos handlers da produção) ────────────────────────────────────
+app.all('/api/pl/matches',      route(matchesHandler))
+app.all('/api/pl/match-events', route(matchEventsHandler))
+app.all('/api/pl/match-stats',  route(matchStatsHandler))
+app.all('/api/pl/standings',    route(standingsHandler))
+app.all('/api/pl/phases',       route(phasesHandler))
+app.all('/api/comments',        route(commentsHandler))
+app.all('/api/scrape/news',     route(newsHandler))
+app.all('/api/push/subscribe',  route(pushHandler))
+app.all('/api/db/matches',      route(dbMatchesHandler))
+app.all('/api/db/players',      route(dbPlayersHandler))
+app.all('/api/db/teams',        route(dbTeamsHandler))
+app.all('/api/db/sync',         route(dbSyncHandler))
+app.all('/api/health',          route(healthHandler))
 
 // 🛡️ CSRF Token endpoint
 app.get('/api/csrf-token', serveCsrfToken)
@@ -148,8 +90,7 @@ app.get('/api/csrf-token', serveCsrfToken)
 app.use(errorHandler)
 
 app.listen(PORT, () => {
-  const keyOk = API_KEY && API_KEY !== 'insira_sua_chave_aqui'
-  console.log(`\n⚽ Football API server → http://localhost:${PORT}`)
-  console.log(`   Chave: ${keyOk ? '✅ configurada' : '⚠️  FALTANDO — edite o .env'}`)
-  if (!keyOk) console.log('   Cadastro grátis: https://www.football-data.org/client/register\n')
+  console.log(`\n⚽ ScoutFut API (local) → http://localhost:${PORT}`)
+  console.log(`   Fonte: ESPN (sem necessidade de chave)`)
+  console.log(`   Banco: ${process.env.DATABASE_URL ? '✅ conectado' : '— sem DATABASE_URL (comentários/db desativados)'}\n`)
 })
