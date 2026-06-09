@@ -1,20 +1,11 @@
-import { useState } from 'react'
 import MatchTimeline from './MatchTimeline'
-import Comments from './Comments'
 
 /**
  * 📊 MATCH DETAILS — Detalhes completos da partida
- * Modal/página com abas: Resumo, Timeline, Heatmap, Comentários
+ * Modal com placar e timeline de eventos
  */
 export default function MatchDetails({ match, onClose }) {
-  const [activeTab, setActiveTab] = useState('comments')
-
   if (!match) return null
-
-  const tabs = [
-    { id: 'comments', label: 'Comentários', icon: '💬' },
-    { id: 'timeline', label: 'Timeline', icon: '⏱️' },
-  ]
 
   return (
     <div className="fixed inset-0 z-50 flex items-end sm:items-center justify-center p-0 sm:p-4"
@@ -84,36 +75,8 @@ export default function MatchDetails({ match, onClose }) {
           </div>
         </div>
 
-        {/* Tabs */}
-        <div className="flex gap-1 p-2 sm:p-4 border-b border-brand-border bg-brand-accent/50 overflow-x-auto scrollbar-none">
-          {tabs.map(tab => (
-            <button
-              key={tab.id}
-              onClick={() => setActiveTab(tab.id)}
-              className={`px-3 sm:px-4 py-2 rounded-lg text-sm font-bold flex-shrink-0 transition-all ${
-                activeTab === tab.id
-                  ? 'text-white bg-brand-green'
-                  : 'text-white/60 hover:text-white hover:bg-white/10'
-              }`}
-            >
-              <span className="mr-1">{tab.icon}</span>
-              <span className="hidden sm:inline">{tab.label}</span>
-            </button>
-          ))}
-        </div>
-
-        {/* Conteúdo das Abas */}
-        <div className="flex-1 min-h-0 flex flex-col">
-          {/* Comentários */}
-          {activeTab === 'comments' && (
-            <Comments matchId={match.id} embedded onClose={onClose} />
-          )}
-
-          {/* Timeline (eventos reais do jogo) */}
-          {activeTab === 'timeline' && (
-            <MatchTimeline match={match} embedded onClose={onClose} />
-          )}
-        </div>
+        {/* Timeline */}
+        <MatchTimeline match={match} embedded onClose={onClose} />
       </div>
     </div>
   )
