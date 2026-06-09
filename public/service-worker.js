@@ -2,9 +2,10 @@
  * 🔧 SERVICE WORKER — Cache estratégias e offline support
  */
 
-const CACHE_NAME = 'scoutfut-v1'
-const RUNTIME_CACHE = 'scoutfut-runtime-v1'
-const ASSET_CACHE = 'scoutfut-assets-v1'
+const CACHE_NAME = 'scoutfut-v2'
+const RUNTIME_CACHE = 'scoutfut-runtime-v2'
+const ASSET_CACHE = 'scoutfut-assets-v2'
+const CURRENT_CACHES = [CACHE_NAME, RUNTIME_CACHE, ASSET_CACHE]
 
 // Assets para cache na instalação
 const PRECACHE_URLS = [
@@ -38,7 +39,8 @@ self.addEventListener('activate', (event) => {
     caches.keys().then((cacheNames) => {
       return Promise.all(
         cacheNames.map((cacheName) => {
-          if (cacheName !== CACHE_NAME && !cacheName.startsWith('scoutfut-')) {
+          // Apaga qualquer cache que nao seja da versao atual
+          if (!CURRENT_CACHES.includes(cacheName)) {
             console.log('[SW] Deleting old cache:', cacheName)
             return caches.delete(cacheName)
           }
@@ -71,18 +73,24 @@ self.addEventListener('fetch', (event) => {
     return
   }
 
-  // Estratégia 2: Cache first para assets
+  // Estratégia 2: Network first para HTML/navegação e scripts
+  // (garante que o usuário sempre receba a versão mais nova do site)
+  if (request.mode === 'navigate' || request.destination === 'document' || request.destination === 'script') {
+    event.respondWith(networkFirst(request))
+    return
+  }
+
+  // Estratégia 3: Cache first apenas para assets estáticos (imagens, fontes, css)
   if (
     request.destination === 'image' ||
     request.destination === 'style' ||
-    request.destination === 'script' ||
     request.destination === 'font'
   ) {
     event.respondWith(cacheFirst(request))
     return
   }
 
-  // Estratégia 3: Stale while revalidate para docs/pages
+  // Estratégia 4: Stale while revalidate para o resto
   event.respondWith(staleWhileRevalidate(request))
 })
 
