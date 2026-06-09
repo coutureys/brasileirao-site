@@ -27,13 +27,31 @@ export default async function handler(req, res) {
 
   try {
     const league = ALLOWED_LEAGUES.includes(req.query?.league) ? req.query.league : 'bra.1'
-    const ESPN   = `${ESPN_BASE}/${league}/scoreboard`
-    const r      = await fetch(ESPN)
-    const data   = await r.json()
+
+    // A ESPN só devolve a rodada atual no scoreboard padrão. Durante pausas
+    // (ex: Copa do Mundo) isso fica só com jogos encerrados. Por isso buscamos
+    // também uma janela futura (próximos 60 dias) pra trazer os agendados.
+    const pad   = (n) => String(n).padStart(2, '0')
+    const fmt   = (d) => `${d.getFullYear()}${pad(d.getMonth() + 1)}${pad(d.getDate())}`
+    const now   = new Date()
+    const ahead = new Date(now.getTime() + 60 * 24 * 60 * 60 * 1000)
+    const range = `${fmt(now)}-${fmt(ahead)}`
+
+    const [rNow, rNext] = await Promise.all([
+      fetch(`${ESPN_BASE}/${league}/scoreboard`),
+      fetch(`${ESPN_BASE}/${league}/scoreboard?dates=${range}`),
+    ])
+    const [dNow, dNext] = await Promise.all([rNow.json(), rNext.json()])
+
+    // Junta os eventos das duas janelas sem duplicar (por id da ESPN)
+    const byId = new Map()
+    for (const ev of [...(dNow?.events ?? []), ...(dNext?.events ?? [])]) {
+      if (ev?.id && !byId.has(ev.id)) byId.set(ev.id, ev)
+    }
 
     const live = [], results = [], upcoming = []
 
-    for (const ev of data?.events ?? []) {
+    for (const ev of byId.values()) {
       const comp   = ev.competitions?.[0] ?? {}
       const sName  = ev.status?.type?.name ?? ''
       const home   = comp.competitors?.find((c) => c.homeAway === 'home') ?? {}
@@ -62,14 +80,22 @@ export default async function handler(req, res) {
       else                 upcoming.push({ ...match, status: 'SCHEDULED' })
     }
 
+    // Ordena: resultados do mais recente; próximos do mais próximo. Limita.
+    const byDateDesc = (a, b) => new Date(b.utcDate || 0) - new Date(a.utcDate || 0)
+    const byDateAsc  = (a, b) => new Date(a.utcDate || 0) - new Date(b.utcDate || 0)
+    results.sort(byDateDesc)
+    upcoming.sort(byDateAsc)
+    const resultsOut  = results.slice(0, 20)
+    const upcomingOut = upcoming.slice(0, 20)
+
     // Salva no banco em background
     if (dbAvailable()) {
-      saveMatches([...live, ...results, ...upcoming]).catch((e) =>
+      saveMatches([...live, ...resultsOut, ...upcomingOut]).catch((e) =>
         console.error('[matches] DB save error:', e.message)
       )
     }
 
-    res.json({ live, results, upcoming })
+    res.json({ live, results: resultsOut, upcoming: upcomingOut })
   } catch (err) {
     res.status(500).json({ error: err.message })
   }
