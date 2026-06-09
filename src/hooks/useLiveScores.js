@@ -144,7 +144,10 @@ export function useLiveScores({
         round:      m.matchday ? `Rodada ${m.matchday}` : '—',
         stadium:    m.venue ?? '—',
         utcDate: m.utcDate ?? null,
-        kickoff: m.utcDate ? new Date(m.utcDate).toLocaleTimeString('pt-BR', { hour:'2-digit', minute:'2-digit', timeZone:'America/Sao_Paulo' }) : '',
+        timeTbd: m.timeTbd ?? false,
+        kickoff: m.timeTbd
+          ? 'A definir'
+          : (m.utcDate ? new Date(m.utcDate).toLocaleTimeString('pt-BR', { hour:'2-digit', minute:'2-digit', timeZone:'America/Sao_Paulo' }) : ''),
         date:    m.utcDate ? new Date(m.utcDate).toLocaleDateString('pt-BR', { day:'2-digit', month:'2-digit', timeZone:'America/Sao_Paulo' }) : '',
         home: {
           name:  m.homeTeam?.name  ?? '—',

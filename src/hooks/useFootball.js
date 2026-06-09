@@ -92,7 +92,8 @@ function normalizeMatch(m, forcedStatus) {
     minute:  m.minute ?? null,
     round:   m.matchday ? `Rodada ${m.matchday}` : '—',
     stadium: m.venue ?? '—',
-    kickoff,
+    kickoff: m.timeTbd ? 'A definir' : kickoff,
+    timeTbd: m.timeTbd ?? false,
     date,
     home: {
       name:  m.homeTeam?.name  ?? '—',

@@ -57,12 +57,21 @@ export default async function handler(req, res) {
       const home   = comp.competitors?.find((c) => c.homeAway === 'home') ?? {}
       const away   = comp.competitors?.find((c) => c.homeAway === 'away') ?? {}
 
+      // Horário "a definir": a ESPN usa meia-noite no horário dos EUA como
+      // placeholder quando o horário do jogo ainda não foi marcado. Isso cai
+      // na madrugada do Brasil (antes das 8h), o que nunca é horário real de
+      // jogo do Brasileirão — então tratamos como não definido.
+      const kd      = ev.date ? new Date(ev.date) : null
+      const brtHour = kd ? (kd.getUTCHours() - 3 + 24) % 24 : null   // Brasília = UTC-3
+      const timeTbd = brtHour != null && brtHour < 8
+
       const match = {
         espnId:      ev.id,
         status:      sName,
         minute:      ev.status?.displayClock ?? null,
         period:      ev.status?.period       ?? null,
         isHalfTime:  sName === 'STATUS_HALFTIME',
+        timeTbd,
         serverTs:    Date.now(), // timestamp do servidor para sincronizar
         utcDate:     ev.date ?? null,
         matchday:    comp.notes?.[0]?.headline ?? null,

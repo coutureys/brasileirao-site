@@ -131,7 +131,7 @@ function MatchRow({ match, onPredict }) {
     <div className="card px-4 py-3 flex items-center gap-3">
       <div className="text-center flex-shrink-0 w-14">
         <p className="text-[10px] text-white/40 uppercase">{match.date}</p>
-        <p className="text-sm font-bold text-brand-green">{match.kickoff}</p>
+        <p className={`font-bold text-brand-green ${match.timeTbd ? 'text-[9px] leading-tight' : 'text-sm'}`}>{match.kickoff}</p>
       </div>
 
       <div className="w-px h-8 bg-white/10 flex-shrink-0" />
@@ -171,7 +171,7 @@ function MatchCard({ match, onPredict }) {
       <div className="flex items-center justify-between gap-3">
         <TeamSide team={match.home} />
         <div className="text-center px-2 flex-shrink-0">
-          <div className="text-xl font-extrabold text-brand-green">{match.kickoff}</div>
+          <div className={`font-extrabold text-brand-green ${match.timeTbd ? 'text-sm' : 'text-xl'}`}>{match.kickoff}</div>
           <div className="text-[10px] text-white/40 uppercase tracking-wider mt-1">vs</div>
         </div>
         <TeamSide team={match.away} />
