@@ -11,7 +11,7 @@ export default function RecentResults() {
   useEffect(() => {
     const fetchResults = async () => {
       try {
-        const leaguesToFetch = ['bra.1', 'bra.2', 'lib', 'bra.copa']
+        const leaguesToFetch = ['bra.1']
         const allResults = {}
 
         for (const league of leaguesToFetch) {
@@ -35,7 +35,7 @@ export default function RecentResults() {
     fetchResults()
   }, [])
 
-  const leagueIds = ['bra.1', 'bra.2', 'lib', 'bra.copa']
+  const leagueIds = ['bra.1']
 
   if (loading) return null
 
@@ -90,14 +90,14 @@ export default function RecentResults() {
                 </div>
 
                 {/* Placar Destaque */}
-                <div className="flex items-center gap-2 flex-shrink-0">
-                  <span className={`text-lg font-black px-3 py-1 rounded-lg ${
+                <div className="flex items-center gap-1.5 flex-shrink-0">
+                  <span className={`w-9 h-9 flex items-center justify-center text-lg font-black rounded-lg tabular-nums ${
                     homeWin ? 'bg-brand-green/20 text-brand-green' : 'text-white/70'
                   }`}>
                     {match.homeTeam?.score}
                   </span>
-                  <span className="text-white/30 text-xs font-bold">-</span>
-                  <span className={`text-lg font-black px-3 py-1 rounded-lg ${
+                  <span className="text-white/30 text-sm font-bold">—</span>
+                  <span className={`w-9 h-9 flex items-center justify-center text-lg font-black rounded-lg tabular-nums ${
                     awayWin ? 'bg-brand-green/20 text-brand-green' : 'text-white/70'
                   }`}>
                     {match.awayTeam?.score}
