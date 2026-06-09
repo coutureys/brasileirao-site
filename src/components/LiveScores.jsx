@@ -123,7 +123,7 @@ export default function LiveScores({ league = 'bra.1', leagueInfo, compact = fal
               <button key={f.key} onClick={() => setFilter(f.key)}
                       className={`px-3 py-1.5 rounded-lg text-xs font-semibold transition-all ${
                         filter === f.key
-                          ? 'bg-brand-green text-brand-dark shadow'
+                          ? 'bg-brand-green text-white shadow'
                           : 'text-white/60 hover:text-white'}`}>
                 {f.label}
                 {f.key === 'LIVE' && count > 0 && (
@@ -237,7 +237,7 @@ function GoalToast({ goals }) {
       {goals.map((g, i) => (
         <div key={i}
              className="flex items-center gap-2 px-4 py-2.5 rounded-2xl
-                        bg-brand-green text-brand-dark font-black text-sm
+                        bg-brand-green text-white font-black text-sm
                         shadow-xl shadow-brand-green/30 animate-slide-up">
           <span className="text-lg">⚽</span>
           <span>GOL! {g.team}</span>

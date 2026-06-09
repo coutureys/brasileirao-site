@@ -27,7 +27,7 @@ export default function MatchDetails({ match, onClose }) {
            onClick={e => e.stopPropagation()}>
 
         {/* Header com Placar */}
-        <div className="bg-gradient-to-b from-brand-accent to-brand-dark p-6 sm:p-8 border-b border-brand-border">
+        <div className="bg-brand-accent p-6 sm:p-8 border-b border-brand-border">
           <button
             onClick={onClose}
             className="absolute top-4 right-4 z-10 w-8 h-8 rounded-full bg-white/10
@@ -92,7 +92,7 @@ export default function MatchDetails({ match, onClose }) {
               onClick={() => setActiveTab(tab.id)}
               className={`flex-1 px-3 py-2 rounded-lg text-sm font-bold transition-all ${
                 activeTab === tab.id
-                  ? 'text-brand-dark bg-brand-green shadow'
+                  ? 'text-white bg-brand-green shadow'
                   : 'text-white/60 hover:text-white hover:bg-white/10'
               }`}
             >

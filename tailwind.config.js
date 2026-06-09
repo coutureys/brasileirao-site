@@ -5,11 +5,17 @@ export default {
     extend: {
       colors: {
         brand: {
-          green:  '#00E676',
-          dark:   '#080B14',
-          card:   '#0F1523',
-          accent: '#161D2E',
-          border: '#1E2A40',
+          // Tema "blood red" — dark, cinematográfico, flat.
+          // 'green' é mantido como alias do acento (= vermelho) para
+          // compatibilidade com as classes brand-green já espalhadas.
+          green:    '#8B0000',  // acento principal (vermelho sangue)
+          red:      '#8B0000',  // alias explícito
+          redHover: '#C0001A',  // hover do acento
+          dark:     '#0A0A0A',  // fundo base
+          card:     '#141414',  // superfície (cards)
+          accent:   '#1E1E1E',  // superfície 2 (hover, aninhados)
+          border:   '#2A2A2A',  // borda padrão
+          muted:    '#888888',  // texto secundário
         },
       },
       fontFamily: {
@@ -19,9 +25,10 @@ export default {
         'gradient-radial': 'radial-gradient(var(--tw-gradient-stops))',
       },
       boxShadow: {
-        'glow-green': '0 0 24px rgba(0, 230, 118, 0.15)',
-        'glow-sm':    '0 0 12px rgba(0, 230, 118, 0.10)',
-        'card':       '0 4px 24px rgba(0,0,0,0.4)',
+        // Sem glow — superfícies flat. Sombras apenas para leve profundidade.
+        'glow-green': 'none',
+        'glow-sm':    'none',
+        'card':       '0 2px 8px rgba(0,0,0,0.5)',
       },
       animation: {
         'pulse-slow': 'pulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite',
@@ -59,8 +66,8 @@ export default {
           '100%': { opacity: 0, transform: 'translateY(100px) rotate(360deg)' },
         },
         glowPulse: {
-          '0%, 100%': { boxShadow: '0 0 20px rgba(0, 230, 118, 0.3)' },
-          '50%':      { boxShadow: '0 0 40px rgba(0, 230, 118, 0.6)' },
+          '0%, 100%': { opacity: 1 },
+          '50%':      { opacity: 0.7 },
         },
         float: {
           '0%, 100%': { transform: 'translateY(0px)' },

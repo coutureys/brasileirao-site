@@ -345,8 +345,8 @@ export function CompareTray({ players, onCompare, onRemove, onClear }) {
       <div className="flex items-center gap-2 flex-shrink-0">
         {active.length >= 2 && (
           <button onClick={onCompare}
-                  className="px-3 py-1.5 rounded-xl bg-brand-green text-brand-dark
-                             text-xs font-black hover:bg-emerald-400 transition active:scale-95">
+                  className="px-3 py-1.5 rounded-xl bg-brand-green text-white
+                             text-xs font-black hover:bg-brand-redHover transition active:scale-95">
             Comparar ⚖️
           </button>
         )}

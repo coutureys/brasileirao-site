@@ -195,8 +195,8 @@ export default function Comments({ matchId, matchTitle, onClose, embedded = fals
               />
               <button onClick={() => { if (username.trim()) { saveUser(username, color); setSetup(false) }}}
                       disabled={!username.trim()}
-                      className="px-4 py-2 rounded-xl bg-brand-green text-brand-dark
-                                 text-sm font-black disabled:opacity-40 hover:bg-emerald-400 transition">
+                      className="px-4 py-2 rounded-xl bg-brand-green text-white
+                                 text-sm font-black disabled:opacity-40 hover:bg-brand-redHover transition">
                 OK
               </button>
             </div>
@@ -276,7 +276,7 @@ export default function Comments({ matchId, matchTitle, onClose, embedded = fals
               {/* Enviar */}
               <button onClick={handleSend} disabled={!body.trim() || sending}
                       className="w-9 h-9 rounded-full bg-brand-green flex items-center justify-center
-                                 text-brand-dark font-black disabled:opacity-40 hover:bg-emerald-400
+                                 text-white font-black disabled:opacity-40 hover:bg-brand-redHover
                                  transition active:scale-90 flex-shrink-0">
                 {sending ? (
                   <svg className="w-4 h-4 animate-spin" viewBox="0 0 24 24" fill="none">

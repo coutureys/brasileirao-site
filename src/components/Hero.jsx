@@ -37,8 +37,8 @@ export default function Hero() {
             <div className="mt-7 flex gap-3">
               <a href="#ao-vivo"
                  className="flex-1 sm:flex-none text-center px-6 py-3.5 rounded-xl
-                            bg-brand-green text-brand-dark font-black text-sm
-                            hover:bg-emerald-400 active:scale-95 transition-all
+                            bg-brand-green text-white font-black text-sm
+                            hover:bg-brand-redHover active:scale-95 transition-all
                             shadow-glow-green">
                 Scores ao vivo
               </a>

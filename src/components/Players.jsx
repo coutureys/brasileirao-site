@@ -111,7 +111,7 @@ export default function Players({ league = 'bra.1', leagueInfo }) {
           </div>
           <button onClick={() => setShowForm(f => !f)}
                   className="flex items-center gap-2 px-4 py-2.5 rounded-xl bg-brand-green
-                             text-brand-dark font-black text-sm hover:bg-emerald-400
+                             text-white font-black text-sm hover:bg-brand-redHover
                              active:scale-95 transition-all shadow-glow-sm">
             <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M12 4v16m8-8H4"/>
@@ -138,7 +138,7 @@ export default function Players({ league = 'bra.1', leagueInfo }) {
           {TABS.map(t => (
             <button key={t.key} onClick={() => setTab(t.key)}
                     className={`flex items-center gap-1.5 px-3 sm:px-4 py-2 rounded-xl text-xs sm:text-sm font-bold transition-all
-                      ${tab === t.key ? 'bg-brand-green text-brand-dark shadow-glow-sm' : 'text-white/50 hover:text-white'}`}>
+                      ${tab === t.key ? 'bg-brand-green text-white shadow-glow-sm' : 'text-white/50 hover:text-white'}`}>
               <span>{t.icon}</span>
               <span className="hidden sm:inline">{t.label}</span>
             </button>
@@ -240,8 +240,8 @@ function PlayerCardModal({ player: p, onClose }) {
             {/* Rating badge */}
             <div className="absolute top-3 right-14">
               <div className={`w-12 h-12 rounded-xl flex flex-col items-center justify-center font-black shadow-lg
-                ${rating >= 8 ? 'bg-brand-green text-brand-dark' :
-                  rating >= 6 ? 'bg-amber-400 text-brand-dark' : 'bg-white/20 text-white'}`}>
+                ${rating >= 8 ? 'bg-brand-green text-white' :
+                  rating >= 6 ? 'bg-amber-400 text-white' : 'bg-white/20 text-white'}`}>
                 <span className="text-xl leading-none">{rating.toFixed(1)}</span>
                 <span className="text-[8px] uppercase tracking-wide opacity-70">Rating</span>
               </div>
@@ -521,8 +521,8 @@ function PlayerForm({ form, onChange, onSubmit, onCancel, submitting }) {
       </div>
       <div className="flex gap-3">
         <button type="submit" disabled={submitting}
-                className="px-5 py-2.5 rounded-xl bg-brand-green text-brand-dark font-black text-sm
-                           hover:bg-emerald-400 active:scale-95 transition-all disabled:opacity-50">
+                className="px-5 py-2.5 rounded-xl bg-brand-green text-white font-black text-sm
+                           hover:bg-brand-redHover active:scale-95 transition-all disabled:opacity-50">
           {submitting ? 'Salvando…' : 'Salvar'}
         </button>
         <button type="button" onClick={onCancel}

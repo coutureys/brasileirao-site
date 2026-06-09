@@ -9,7 +9,7 @@ const COMPETITIONS = [
 ]
 
 const CATEGORIES = [
-  { key: 'goals',        label: 'Artilheiros',      icon: '⚽', stat: 'goals',        color: '#00E676', bg: 'from-green-500/20 to-transparent'  },
+  { key: 'goals',        label: 'Artilheiros',      icon: '⚽', stat: 'goals',        color: '#8B0000', bg: 'from-red-950/40 to-transparent'  },
   { key: 'assists',      label: 'Assistências',      icon: '🎯', stat: 'assists',       color: '#3B82F6', bg: 'from-blue-500/20 to-transparent'   },
   { key: 'key_passes',   label: 'Passes Decisivos',  icon: '🔑', stat: 'assists',       color: '#8B5CF6', bg: 'from-purple-500/20 to-transparent' },
   { key: 'yellow_cards', label: 'Cartões Amarelos',  icon: '🟨', stat: 'yellow_cards',  color: '#F59E0B', bg: 'from-amber-500/20 to-transparent'  },

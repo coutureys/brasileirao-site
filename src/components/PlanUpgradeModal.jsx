@@ -79,7 +79,7 @@ export default function PlanUpgradeModal({ isOpen, onClose }) {
         <div className="space-y-2">
           <button
             onClick={handleUpgrade}
-            className="w-full px-6 py-3 bg-green-500 text-black font-black rounded-xl hover:bg-green-400 transition"
+            className="w-full px-6 py-3 bg-green-500 text-black font-black rounded-xl hover:bg-brand-redHover transition"
           >
             Upgrade Agora
           </button>

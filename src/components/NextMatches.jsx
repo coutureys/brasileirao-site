@@ -76,7 +76,7 @@ export default function NextMatches({ league = 'bra.1', leagueInfo }) {
               <button onClick={handleSimulate}
                       disabled={!simHome || !simAway || simHome === simAway}
                       className="w-full sm:w-auto px-6 py-2.5 rounded-xl bg-brand-green
-                                 text-brand-dark font-black text-sm hover:bg-emerald-400
+                                 text-white font-black text-sm hover:bg-brand-redHover
                                  active:scale-95 transition-all disabled:opacity-40
                                  disabled:cursor-not-allowed flex-shrink-0">
                 Ver Palpite →

@@ -426,7 +426,7 @@ function KnockoutMatch({ match: m, leagueInfo }) {
 function FormDot({ result }) {
   const styles = {
     W: 'bg-emerald-500 text-white',
-    D: 'bg-amber-400 text-brand-dark',
+    D: 'bg-amber-400 text-white',
     L: 'bg-red-500 text-white',
   }
   const labels = { W: 'V', D: 'E', L: 'D' }

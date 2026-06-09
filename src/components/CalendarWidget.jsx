@@ -88,7 +88,7 @@ export default function CalendarWidget() {
             onClick={() => setView(v.id)}
             className={`px-3 py-1.5 text-xs font-bold rounded transition-all
               ${view === v.id
-                ? 'bg-brand-green text-brand-dark'
+                ? 'bg-brand-green text-white'
                 : 'bg-white/5 text-white/60 hover:bg-white/10'}`}
           >
             {v.icon} {v.label}
@@ -125,7 +125,7 @@ export default function CalendarWidget() {
                 onClick={() => setSelectedMatches(dayMatches)}
                 className={`aspect-square rounded-lg flex flex-col items-center justify-center text-xs font-bold transition-all
                   ${isToday
-                    ? 'bg-brand-green text-brand-dark'
+                    ? 'bg-brand-green text-white'
                     : dayMatches.length > 0
                     ? 'bg-blue-500/20 border border-blue-500/30 text-white hover:bg-blue-500/30'
                     : 'bg-white/5 text-white/60 hover:bg-white/10'}`}

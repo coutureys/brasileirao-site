@@ -54,7 +54,7 @@ export default function AdminPage() {
               onClick={() => setActiveTab(tab.id)}
               className={`px-4 py-2 rounded-lg font-bold text-sm flex-shrink-0 transition-all
                 ${activeTab === tab.id
-                  ? 'bg-brand-green text-brand-dark'
+                  ? 'bg-brand-green text-white'
                   : 'bg-white/5 text-white/60 hover:bg-white/10'}`}
             >
               {tab.icon} {tab.label}
@@ -149,7 +149,7 @@ export default function AdminPage() {
           <div className="bg-white/3 border border-white/10 rounded-xl p-6">
             <div className="flex justify-between items-center mb-4">
               <h3 className="text-sm font-bold text-white">Gerenciar Jogos</h3>
-              <button className="px-4 py-2 bg-brand-green text-brand-dark font-bold rounded hover:bg-green-400 transition">
+              <button className="px-4 py-2 bg-brand-green text-white font-bold rounded hover:bg-brand-redHover transition">
                 ➕ Novo Jogo
               </button>
             </div>

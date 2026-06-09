@@ -94,7 +94,7 @@ export default function GoalsFeed() {
           onClick={() => setFilter('all')}
           className={`px-4 py-2 rounded-full text-sm font-bold transition-all flex-shrink-0
             ${filter === 'all'
-              ? 'bg-brand-green text-brand-dark'
+              ? 'bg-brand-green text-white'
               : 'bg-white/5 text-white/60 hover:bg-white/10'}`}
         >
           🎯 Todos
@@ -103,7 +103,7 @@ export default function GoalsFeed() {
           onClick={() => setFilter('favorites')}
           className={`px-4 py-2 rounded-full text-sm font-bold transition-all flex-shrink-0
             ${filter === 'favorites'
-              ? 'bg-brand-green text-brand-dark'
+              ? 'bg-brand-green text-white'
               : 'bg-white/5 text-white/60 hover:bg-white/10'}`}
         >
           ⭐ Favoritos
@@ -112,7 +112,7 @@ export default function GoalsFeed() {
           onClick={() => setFilter('league')}
           className={`px-4 py-2 rounded-full text-sm font-bold transition-all flex-shrink-0
             ${filter === 'league'
-              ? 'bg-brand-green text-brand-dark'
+              ? 'bg-brand-green text-white'
               : 'bg-white/5 text-white/60 hover:bg-white/10'}`}
         >
           🏆 Série A

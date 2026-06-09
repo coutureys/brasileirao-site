@@ -89,13 +89,13 @@ function StatRow({ stat }) {
         </span>
 
         <span className={`text-sm font-black tabular-nums w-14 text-right ${
-          awayWins ? 'text-blue-400' : 'text-white/80'
+          awayWins ? 'text-white' : 'text-white/80'
         }`}>
           {stat.away.display}
         </span>
       </div>
 
-      {/* Barra dupla */}
+      {/* Barra dupla — casa (vermelho) x visitante (branco) */}
       <div className="flex items-center gap-1 h-2">
         <div className="flex-1 flex justify-end">
           <div
@@ -108,7 +108,7 @@ function StatRow({ stat }) {
         <div className="flex-1 flex justify-start">
           <div
             className={`h-full rounded-r-full transition-all duration-500 ${
-              awayWins ? 'bg-blue-400' : 'bg-blue-400/40'
+              awayWins ? 'bg-white/70' : 'bg-white/25'
             }`}
             style={{ width: `${awayPct}%` }}
           />

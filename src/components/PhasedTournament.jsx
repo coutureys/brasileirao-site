@@ -30,7 +30,7 @@ export default function PhasedTournament({ league = 'uefa.champions', leagueInfo
             <p className="text-4xl mb-3">⚠️</p>
             <p className="font-bold text-white/60">Erro ao carregar fases do torneio</p>
             <button onClick={refetch}
-                    className="mt-4 px-4 py-2 rounded-xl bg-brand-green text-brand-dark font-bold text-sm">
+                    className="mt-4 px-4 py-2 rounded-xl bg-brand-green text-white font-bold text-sm">
               Tentar novamente
             </button>
           </div>

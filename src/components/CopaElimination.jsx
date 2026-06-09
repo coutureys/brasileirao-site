@@ -30,7 +30,7 @@ export default function CopaElimination({ league = 'bra.copa', leagueInfo }) {
             <p className="font-bold text-white/60">Erro ao carregar eliminatórias</p>
             <p className="text-sm text-white/40 mt-2">{error}</p>
             <button onClick={refetch}
-                    className="mt-4 px-4 py-2 rounded-xl bg-brand-green text-brand-dark font-bold text-sm">
+                    className="mt-4 px-4 py-2 rounded-xl bg-brand-green text-white font-bold text-sm">
               Tentar novamente
             </button>
           </div>
@@ -49,7 +49,7 @@ export default function CopaElimination({ league = 'bra.copa', leagueInfo }) {
             <p className="font-bold text-white/60">Eliminatórias ainda não agendadas</p>
             <p className="text-sm text-white/40 mt-2">Confira novamente em breve</p>
             <button onClick={refetch}
-                    className="mt-4 px-4 py-2 rounded-xl bg-brand-green text-brand-dark font-bold text-sm">
+                    className="mt-4 px-4 py-2 rounded-xl bg-brand-green text-white font-bold text-sm">
               Atualizar
             </button>
           </div>

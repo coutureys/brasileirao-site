@@ -46,7 +46,7 @@ export function AnimatedButton({
   className = '',
 }) {
   const variants = {
-    primary: 'bg-brand-green text-brand-dark hover:bg-green-400',
+    primary: 'bg-brand-green text-white hover:bg-brand-redHover',
     secondary: 'bg-white/10 border border-white/20 text-white hover:bg-white/20',
     danger: 'bg-red-500/10 border border-red-500/30 text-red-400 hover:bg-red-500/20',
   }

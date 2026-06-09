@@ -38,7 +38,7 @@ export function setSEOTags(config) {
   // Additional meta tags
   updateMeta('author', author)
   updateMeta('robots', 'index, follow')
-  updateMeta('theme-color', '#00E676')
+  updateMeta('theme-color', '#8B0000')
   updateMeta('apple-mobile-web-app-capable', 'yes')
   updateMeta('apple-mobile-web-app-status-bar-style', 'black-translucent')
 
