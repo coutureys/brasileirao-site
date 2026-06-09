@@ -30,9 +30,7 @@ import phasesHandler      from '../api/pl/phases.js'
 import commentsHandler    from '../api/comments.js'
 import newsHandler        from '../api/scrape/news.js'
 import pushHandler        from '../api/push/subscribe.js'
-import dbMatchesHandler   from '../api/db/matches.js'
 import dbPlayersHandler   from '../api/db/players.js'
-import dbTeamsHandler     from '../api/db/teams.js'
 import dbSyncHandler      from '../api/db/sync.js'
 import healthHandler      from '../api/health.js'
 
@@ -77,9 +75,7 @@ app.all('/api/pl/phases',       route(phasesHandler))
 app.all('/api/comments',        route(commentsHandler))
 app.all('/api/scrape/news',     route(newsHandler))
 app.all('/api/push/subscribe',  route(pushHandler))
-app.all('/api/db/matches',      route(dbMatchesHandler))
 app.all('/api/db/players',      route(dbPlayersHandler))
-app.all('/api/db/teams',        route(dbTeamsHandler))
 app.all('/api/db/sync',         route(dbSyncHandler))
 app.all('/api/health',          route(healthHandler))
 
