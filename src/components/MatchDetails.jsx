@@ -1,11 +1,20 @@
+import { useState } from 'react'
 import MatchTimeline from './MatchTimeline'
+import MatchStats from './MatchStats'
 
 /**
  * 📊 MATCH DETAILS — Detalhes completos da partida
- * Modal com placar e timeline de eventos
+ * Modal com placar, estatísticas reais (ESPN) e timeline de eventos
  */
 export default function MatchDetails({ match, onClose }) {
+  const [activeTab, setActiveTab] = useState('stats')
+
   if (!match) return null
+
+  const tabs = [
+    { id: 'stats',    label: 'Estatísticas', icon: '📊' },
+    { id: 'timeline', label: 'Timeline',     icon: '⏱️' },
+  ]
 
   return (
     <div className="fixed inset-0 z-50 flex items-end sm:items-center justify-center p-0 sm:p-4"
@@ -75,8 +84,33 @@ export default function MatchDetails({ match, onClose }) {
           </div>
         </div>
 
-        {/* Timeline */}
-        <MatchTimeline match={match} embedded onClose={onClose} />
+        {/* Abas */}
+        <div className="flex gap-1 p-2 sm:p-3 border-b border-brand-border bg-brand-accent/40">
+          {tabs.map((tab) => (
+            <button
+              key={tab.id}
+              onClick={() => setActiveTab(tab.id)}
+              className={`flex-1 px-3 py-2 rounded-lg text-sm font-bold transition-all ${
+                activeTab === tab.id
+                  ? 'text-brand-dark bg-brand-green shadow'
+                  : 'text-white/60 hover:text-white hover:bg-white/10'
+              }`}
+            >
+              <span className="mr-1.5">{tab.icon}</span>
+              {tab.label}
+            </button>
+          ))}
+        </div>
+
+        {/* Conteúdo da aba */}
+        <div className="flex-1 min-h-0 flex flex-col">
+          {activeTab === 'stats' && (
+            <MatchStats match={match} embedded onClose={onClose} />
+          )}
+          {activeTab === 'timeline' && (
+            <MatchTimeline match={match} embedded onClose={onClose} />
+          )}
+        </div>
       </div>
     </div>
   )

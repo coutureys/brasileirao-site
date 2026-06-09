@@ -3,10 +3,26 @@
  */
 import { useState, useEffect } from 'react'
 import { LEAGUES } from '../leagues'
+import MatchDetails from './MatchDetails'
+
+// Converte o formato cru da API para o formato que o MatchDetails espera
+function toDetails(m) {
+  const d = m.utcDate ? new Date(m.utcDate) : null
+  return {
+    id:      m.espnId ?? m.id,
+    status:  m.status ?? 'FINISHED',
+    stadium: m.venue ?? '—',
+    date: d ? d.toLocaleDateString('pt-BR', { day: '2-digit', month: '2-digit', year: 'numeric', timeZone: 'America/Sao_Paulo' }) : '',
+    kickoff: d ? d.toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit', timeZone: 'America/Sao_Paulo' }) : '',
+    home: { name: m.homeTeam?.name ?? '—', crest: m.homeTeam?.crest ?? null, score: m.homeTeam?.score ?? null },
+    away: { name: m.awayTeam?.name ?? '—', crest: m.awayTeam?.crest ?? null, score: m.awayTeam?.score ?? null },
+  }
+}
 
 export default function RecentResults() {
   const [results, setResults] = useState({})
   const [loading, setLoading] = useState(true)
+  const [selected, setSelected] = useState(null)
 
   useEffect(() => {
     const fetchResults = async () => {
@@ -65,8 +81,9 @@ export default function RecentResults() {
 
             return (
               <div
-                key={`${match.id}-${idx}`}
-                className="card p-4 hover:bg-white/3 transition cursor-pointer flex items-center gap-4">
+                key={`${match.espnId ?? match.id}-${idx}`}
+                onClick={() => setSelected(toDetails(match))}
+                className="card p-4 hover:bg-white/[0.04] hover:border-brand-green/20 transition cursor-pointer flex items-center gap-4 group">
 
                 {/* Liga Badge */}
                 <div className="flex items-center gap-1.5 flex-shrink-0 bg-white/5 px-2.5 py-1.5 rounded-lg">
@@ -119,15 +136,21 @@ export default function RecentResults() {
                   )}
                 </div>
 
-                {/* Data */}
-                <span className="text-xs text-white/30 flex-shrink-0">
-                  {match.date}
-                </span>
+                {/* Indicador de clique → estatísticas */}
+                <div className="flex items-center gap-1 text-white/20 group-hover:text-brand-green flex-shrink-0 transition-colors">
+                  <span className="text-[10px] font-bold hidden sm:inline">Stats</span>
+                  <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                  </svg>
+                </div>
               </div>
             )
           })}
         </div>
       )}
+
+      {/* Modal de detalhes (estatísticas reais + timeline) */}
+      {selected && <MatchDetails match={selected} onClose={() => setSelected(null)} />}
     </div>
   )
 }
